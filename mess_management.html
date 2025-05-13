@@ -1,89 +1,123 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial scale=1.0">
-		<title> Hostel Mess Management </title>
-                <style>
-body{
-          background-color: #154669;
-}
-header {  
-          background-color: #ffd847;
-          color: white;
-          max-width: 800px;
-          margin: 40px auto;
-          padding: 20px;
-          border-radius: 10px;
-          text-align: center;
-} 
-       
-section { 
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial scale=1.0">
+        <title> Hostel Mess Management </title>
+        <link rel="stylesheet" href="style.css">
+</head> 
+<body> 
+        <p style="text-align:center; max-width: 800px; margin: 30px auto; padding: 20px; background-color: #ffd847; border-radius: 10px;"><img src="https://f2.leadsquaredcdn.com/t/t20171020170945/content/common/images/AUK%20Logo.png"  alt="Aity University Bengaluru" height="300" width="300"></p> 
+     <div class="container">
+        <h1>Hostel Mess Management System</h1>
 
-          max-width: 800px;
-          margin: 40px auto;
-          padding: 20px;
-          background: #ffd847;
-          border-radius: 10px;
-          box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-     
-.container {
-          max-width: 800px;
-          margin: 30px auto;
-          padding: 20px;
-          background-color: #ffd847;
-          border-radius: 10px;
-          box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-        
-label {
-          display: block;
-          background-color: #ffd847;
-          margin-top: 15px;
-          font-weight: bold;
-}
+	<div class="menu"> 
+            <button onclick="showSection('add-student-section')">Add New Student</button>
+            <button onclick="showSection('manage-mess-section')">Manage Mess Enrollment</button>
+            <button onclick="showSection('record-meal-section')">Record Meal</button>
+            <button onclick="showSection('order-food-section')">View Menu & Order</button>
+            <button onclick="showSection('bill-section')">Calculate Bill</button>
+            <button onclick="showSection('view-student-section')">View Student Details</button>
+            <button onclick="showSection('view-all-section')">View All Students</button>
+            <button onclick="resetMonthlyMeals()">Reset Monthly Meals</button>
+	</div> 
+         
+	<div id="messages" class="messages"></div>
 
-textarea, input {
-          width: 100%;
-          background-color: #ffd847;
-          padding: 10px;
-          margin-top: 5px;
-          box-sizing: border-box;
-}
-        
-button {
-          margin-top: 20px;
-          padding: 10px 20px;
-          background-color: #154669;
-          color: white;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-}
-        
-.group {
-          background-color: #f1f3f6;
-          margin-top: 20px;
-          padding: 15px;
-          border-radius: 8px;
-}
-                </style> 
-	</head> 
-	<body> 
-                <p style="text-align:center; max-width: 800px; margin: 30px auto; padding: 20px; background-color: #ffd847; border-radius: 10px;"><img src="https://f2.leadsquaredcdn.com/t/                 t20171020170945/content/common/images/AUK%20Logo.png"  alt="Aity University Bengaluru" height="101" width="275"></p> 
-		<header>
-                         <h1 style="text-align:center;color:black;">Hostel Mess Management System</h1>
-			 <p style="text-align:center; color:#154669; font-size:20px;">A visual interface for managing hostel mess operations</p> 
-                 </header>
-                
+        <div id="add-student-section" class="section">
+            <h2>Add New Student</h2>
+            <form id="add-student-form">
+                <label for="add-roll-no">Roll Number:</label>
+                <input type="text" id="add-roll-no" required><br>
 
-		 <div class="container"> 
-		 </div> 
-		 <section> 
-			 <h2 style="color:#154669;">Contact</h2> 
-			 <p>Email: project2025@gmail.com</p> 
-			 <p>Phone: +91 12345 69870</p> 
-		 </section> 
-	</body> 
+                <label for="add-name">Name:</label>
+                <input type="text" id="add-name" required><br>
+
+                <label for="add-room-no">Room Number:</label>
+                <input type="text" id="add-room-no"><br>
+
+                <button type="submit">Add Student</button>
+            </form>
+        </div>
+
+	<div id="manage-mess-section" class="section" style="display: none;">
+            <h2>Manage Mess Enrollment</h2>
+            <label for="manage-roll-no">Roll Number:</label>
+            <input type="text" id="manage-roll-no"><br>
+
+            <p>Enroll/Un-enroll:</p>
+            <input type="radio" id="enroll-yes" name="enroll-status" value="true">
+            <label for="enroll-yes">Enroll</label><br>
+            <input type="radio" id="enroll-no" name="enroll-status" value="false" checked>
+            <label for="enroll-no">Un-enroll</label><br>
+
+            <button onclick="enrollStudent()">Update Enrollment</button>
+             <div id="manage-student-info" class="student-info"></div>
+        </div>
+
+	<div id="record-meal-section" class="section" style="display: none;">
+             <h2>Record / Reduce Plan Meal</h2>
+             <label for="record-roll-no">Roll Number:</label>
+             <input type="text" id="record-roll-no"><br>
+             <button onclick="recordMeal()">Record Meal (+1)</button>
+             <button onclick="reduceMealFromInput()">Reduce Meal (-1)</button>
+             <div id="record-student-info" class="student-info"></div>
+         </div>
+
+	  <div id="order-food-section" class="section" style="display: none;">
+           <h2>View Menu & Place Order</h2>
+           <label for="order-roll-no">Your Roll Number:</label>
+           <input type="text" id="order-roll-no"><br>
+
+           <h3>Menu</h3>
+           <div id="menu-items-container">
+         </div>
+
+          <button onclick="placeOrder()">Place Order</button>
+        <div id="order-output" class="student-info"></div>
+        </div>
+
+	 <div id="bill-section" class="section" style="display: none;">
+            <h2>Calculate Mess Bill</h2>
+            <label for="bill-roll-no">Roll Number:</label>
+            <input type="text" id="bill-roll-no"><br>
+            <button onclick="calculateBill()">Calculate Bill</button>
+             <div id="bill-details" class="student-info"></div>
+        </div>
+
+	 <div id="view-student-section" class="section" style="display: none;">
+            <h2>View Student Details</h2>
+            <label for="view-roll-no">Roll Number:</label>
+            <input type="text" id="view-roll-no"><br>
+            <button onclick="viewStudentDetails()">View Details</button>
+             <div id="student-details" class="student-info"></div>
+        </div>
+
+	<div id="view-all-section" class="section" style="display: none;">
+            <h2>All Registered Students</h2>
+            <table id="students-table">
+                <thead>
+                    <tr>
+                        <th>Roll No.</th>
+                        <th>Name</th>
+                        <th>Room No.</th>
+                        <th>Mess Enrolled</th>
+                        <th>Meals Taken</th>
+                        <th>Individual charges</th>
+                        <th>Total Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+        </div>
+ 
+        <div>  
+	     <h2 style="color:#154669;">Contact</h2> 
+	     <p>Email: project2025@gmail.com</p> 
+	     <p>Phone: +91 12345 69870</p> 
+       </div>
+    </div>
+
+</body> 
 </html>
